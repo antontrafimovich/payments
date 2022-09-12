@@ -1,1 +1,1 @@
-export * from "./local/orm-local";
+module.exports = require("./local/orm-local");

@@ -1,4 +1,5 @@
 var express = require("express");
+var formidable = require("formidable");
 const { OrmLocal } = require("../orm");
 var router = express.Router();
 
@@ -6,10 +7,28 @@ const { getDataFromCsv, convertToCsvString } = require("./../../utils");
 
 const orm = new OrmLocal();
 
-router.post("/build_report", async (req, res) => {
-  const url = req.body.url;
+const fileReader = (req, res, next) => {
+  const form = formidable({});
 
-  const sourceData = await getDataFromCsv(url);
+  console.log("Anton");
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      next(err);
+      return;
+    }
+
+    req.files = files;
+    next();
+  });
+};
+
+router.post("/build_report", fileReader, async (req, res) => {
+  const { file } = req.files;
+
+  console.log(file);
+
+  const sourceData = await getDataFromCsv(file.filepath);
   const mapData = await orm.getMapData();
 
   const mappedSourceData = sourceData.map((item) => {
@@ -38,7 +57,7 @@ router.post("/build_report", async (req, res) => {
     ...resultData,
   ]);
 
-  console.log(csv);
+  res.send(csv)
 });
 
 module.exports = router;

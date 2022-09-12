@@ -1,7 +1,9 @@
-const { getDataFromCsv } = rquire("./../../../utils");
+const { getDataFromCsv } = require("./../../../utils");
+const path = require("path");
 
-export class OrmLocal {
+class OrmLocal {
   async getMapData() {
+    console.log(path.resolve(__dirname, "./../../db/local/map.csv"));
     const data = await getDataFromCsv(
       path.resolve(__dirname, "./../../db/local/map.csv")
     );
@@ -9,3 +11,5 @@ export class OrmLocal {
     return data;
   }
 }
+
+module.exports = { OrmLocal };

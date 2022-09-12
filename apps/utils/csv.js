@@ -2,7 +2,7 @@ const { stringify } = require("csv-stringify");
 const fs = require("fs");
 const csv = require("csv-parser");
 
-export const getDataFromCsv = (srcPath) => {
+const getDataFromCsv = (srcPath) => {
   const results = [];
 
   return new Promise((resolve) => {
@@ -17,7 +17,7 @@ export const getDataFromCsv = (srcPath) => {
   });
 };
 
-export const convertToCsvString = (values) => {
+const convertToCsvString = (values) => {
   return new Promise((res, rej) => {
     const data = [];
 
@@ -43,3 +43,5 @@ export const convertToCsvString = (values) => {
     stringifier.end();
   });
 };
+
+module.exports = { convertToCsvString, getDataFromCsv };
