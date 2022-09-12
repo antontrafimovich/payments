@@ -1,5 +1,7 @@
 var express = require("express");
 var formidable = require("formidable");
+var path = require("path");
+var { write, generateId } = require("./../../utils");
 const { OrmLocal } = require("../orm");
 var router = express.Router();
 
@@ -57,7 +59,25 @@ router.post("/build_report", fileReader, async (req, res) => {
     ...resultData,
   ]);
 
-  res.send(csv)
+  const fileId = generateId();
+  await write(
+    `${path.resolve(__dirname, "./../static")}/${generateId()}.csv`,
+    csv
+  );
+
+  res.json({
+    response: {
+      fileName: fileId,
+    },
+  });
+});
+
+router.get("/download/:fileId", (req, res) => {
+  const { fileId } = req.params;
+
+  console.log(fileId);
+
+  res.status(200).send("Well done!");
 });
 
 module.exports = router;
