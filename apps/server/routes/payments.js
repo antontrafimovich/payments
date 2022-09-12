@@ -60,10 +60,7 @@ router.post("/build_report", fileReader, async (req, res) => {
   ]);
 
   const fileId = generateId();
-  await write(
-    `${path.resolve(__dirname, "./../static")}/${generateId()}.csv`,
-    csv
-  );
+  await write(`${path.resolve(__dirname, "./../static")}/${fileId}.csv`, csv);
 
   res.json({
     response: {
@@ -75,9 +72,10 @@ router.post("/build_report", fileReader, async (req, res) => {
 router.get("/download/:fileId", (req, res) => {
   const { fileId } = req.params;
 
-  console.log(fileId);
-
-  res.status(200).send("Well done!");
+  const pathToFile = path.resolve(__dirname, `./../static/${fileId}.csv`);
+  res
+    .setHeader("Content-Type", "application/csv; charset=utf8")
+    .download(pathToFile, 'report.csv', (error) => console.log(error));
 });
 
 module.exports = router;
