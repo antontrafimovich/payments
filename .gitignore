@@ -1,3 +1,4 @@
 node_modules
 apps/server/db/local
 apps/server/static/*
+apps/server/.env
