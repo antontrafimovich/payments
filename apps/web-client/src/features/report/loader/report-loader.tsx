@@ -1,11 +1,14 @@
 import { useMemo } from "react";
 import React, { useCallback } from "react";
 
-import { useSelector } from "../../common";
-import { FileLoader, UploadChangeParam } from "../../ui-kit";
+import { useDispatch, useSelector } from "../../../common";
+import { FileLoader, UploadChangeParam } from "../../../ui-kit";
+import { getReport } from "../report-slice";
 
-export const PaymentsReportLoader = () => {
+export const ReportLoader = () => {
   const selectedBank = useSelector((state) => state.bankSelector.selectedBank);
+
+  const dispatch = useDispatch();
 
   const data = useMemo(() => {
     return {
@@ -18,16 +21,15 @@ export const PaymentsReportLoader = () => {
       return;
     }
 
-    const fileId = file.response.response.fileName;
-    console.log(file);
-
-    window.location.assign(`http://localhost:3001/payments/download/${fileId}`);
+    console.log(file.response);
   }, []);
 
   return (
     <FileLoader
       data={data}
-      action="http://localhost:5000/payments/build_report"
+      customRequest={({ file, headers, ...others }) => {
+        dispatch(getReport({ file: file as Blob, headers }));
+      }}
       onChange={onChange}
     />
   );

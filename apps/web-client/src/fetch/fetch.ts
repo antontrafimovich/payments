@@ -7,6 +7,10 @@ const getHeaders = (params: RequestInit) => {
     "Content-Type": "application/json",
   };
 
+  if (isDefined(params) && params.headers === null) {
+    return undefined;
+  }
+
   if (isDefined(params) && isDefined(params.headers)) {
     return {
       ...defaultHeaders,
@@ -27,8 +31,15 @@ export const post = (endpoint: string, body: BodyInit, params: RequestInit) => {
   });
 };
 
-export const get = (endpoint: string) => {
+export const postFile = (endpoint: string, body: FormData) => {
+  return post(endpoint, body, { headers: null });
+};
+
+export const get = (endpoint: string, params?: RequestInit) => {
+  const headers = getHeaders(params);
+
   return fetch(`http://localhost:5000/${endpoint}`, {
     method: "GET",
+    headers,
   });
 };

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import bankSelectorReducer, {
   BankSelectorState,
 } from "./features/bank-selector/bank-selector-slice";
+import reportReducer from "./features/report/report-slice";
 
 export interface State {
   bankSelector: BankSelectorState;
@@ -10,6 +11,7 @@ export interface State {
 export const store = configureStore({
   reducer: {
     bankSelector: bankSelectorReducer,
+    report: reportReducer,
   },
 });
 

@@ -8,10 +8,10 @@ const getBanks = createAsyncThunk("bankSelector/getBanks", async () => {
 });
 
 export interface BankSelectorState {
-  selectedBank: string | null;
+  selectedBank: string;
   allBanks: {
-    status: string | null;
-    entities: string[] | null;
+    status: string;
+    entities: string[];
   };
 }
 
@@ -43,7 +43,7 @@ export const bankSelectorSlice = createSlice<
         entities: action.payload,
       };
 
-      state.selectedBank = state.allBanks.entities?.[0] ?? null;
+      state.selectedBank = state.allBanks.entities?.[0];
     });
   },
 });
