@@ -14,8 +14,9 @@ const useStyles = createUseStyles({
   },
   column: {
     width: 200,
-    background: "#98c1d9",
+    background: "#d6efff",
     padding: "8px 8px",
+    color: '#221d23'
   },
 });
 

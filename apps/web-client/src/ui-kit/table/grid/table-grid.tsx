@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo } from "react";
+import { createUseStyles } from "react-jss";
 import {
   GridChildComponentProps,
   VariableSizeGrid as Grid,
@@ -10,6 +11,16 @@ export interface TableCellData {
   columns: Column[];
 }
 
+const useStyles = createUseStyles({
+  gridCell: {
+    padding: "0 8px",
+    color: "#221d23",
+    borderBottom: "1px solid #af8d86",
+    display: "flex",
+    alignItems: "center",
+  },
+});
+
 const Cell = memo(
   ({
     columnIndex,
@@ -17,12 +28,17 @@ const Cell = memo(
     style,
     data,
   }: GridChildComponentProps<TableCellData>) => {
+    const classes = useStyles();
     const { rows, columns } = data;
     const column = columns[columnIndex];
     const row = rows[rowIndex];
     const rowValue = row[column.dataIndex];
 
-    return <div style={style}>{rowValue as string}</div>;
+    return (
+      <div style={style} className={classes.gridCell}>
+        {rowValue as string}
+      </div>
+    );
   }
 );
 
@@ -57,7 +73,7 @@ export const TableGrid = (props: TableGridProps) => {
       itemData={itemData}
       rowCount={rows.length}
       rowHeight={rowHeight}
-      width={900}
+      width={803}
     >
       {Cell}
     </Grid>
