@@ -1,10 +1,12 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import { Column, Table } from "../../../ui-kit";
 import { capitalize } from "../../../utils";
 
+export type ReportData = Record<string, Record<string, string>>;
+
 export interface ReportPlainProps {
-  data: Record<string, Record<string, number>>;
+  data: ReportData;
 }
 
 export const ReportPlain = ({ data }: ReportPlainProps) => {
@@ -18,24 +20,33 @@ export const ReportPlain = ({ data }: ReportPlainProps) => {
     });
   }, [data]);
 
+  const getRowsCount = useCallback(
+    (data: ReportData) => {
+      return Object.values(data[columns[0].dataIndex]).length;
+    },
+    [columns]
+  );
+
   const rows = useMemo(() => {
-    const columns = Object.keys(data);
-    const columnsValues = Object.values(data);
+    const rowsCount = getRowsCount(data);
 
     const rows = [];
-    for (let i = 0; i < columnsValues[0].length; i++) {
+    for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
       const row = columns.reduce(
-        (result, next, index) => {
-          return { ...result, [next]: columnsValues[index][i] };
+        (result, column) => {
+          return {
+            ...result,
+            [column.dataIndex]: data[column.dataIndex][rowIndex],
+          };
         },
-        { id: `${i}` }
+        { id: `${rowIndex}` }
       );
 
       rows.push(row);
     }
 
     return rows;
-  }, [data]);
+  }, [data, getRowsCount, columns]);
 
   return <Table columns={columns} rows={rows} />;
 };

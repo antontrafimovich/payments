@@ -3,12 +3,12 @@ import { TableHeader as Header } from "./header/table-header";
 import { TableProps } from "./table.model";
 
 export const Table = (props: TableProps) => {
-  const { columns } = props;
+  const { columns, rows } = props;
 
   return (
     <div>
       <Header columns={columns} />
-      <Grid />
+      <Grid rows={rows} columns={columns} />
     </div>
   );
 };
