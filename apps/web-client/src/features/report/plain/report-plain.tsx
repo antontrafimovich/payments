@@ -16,6 +16,7 @@ export const ReportPlain = ({ data }: ReportPlainProps) => {
         id: columnKey,
         title: capitalize(columnKey),
         dataIndex: columnKey,
+        width: columnKey === 'counterparty' ? 250 : 200
       };
     });
   }, [data]);

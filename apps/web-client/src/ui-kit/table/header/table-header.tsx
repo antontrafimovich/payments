@@ -1,9 +1,16 @@
 import { createUseStyles } from "react-jss";
 import { Column } from "../table.model";
+import { TableHeaderColumn as HeaderColumn } from "./column/table-header-column";
 
 export interface TableHeaderProps {
   columns: Column[];
 }
+
+interface ColumnStylesProps {
+  width: number;
+}
+
+export interface HeaderStylesProps extends ColumnStylesProps {}
 
 const useStyles = createUseStyles({
   header: {
@@ -11,12 +18,6 @@ const useStyles = createUseStyles({
     "& > div + div": {
       marginLeft: 1,
     },
-  },
-  column: {
-    width: 200,
-    background: "#d6efff",
-    padding: "8px 8px",
-    color: '#221d23'
   },
 });
 
@@ -28,9 +29,7 @@ export const TableHeader = (props: TableHeaderProps) => {
   return (
     <div className={classes.header}>
       {columns.map((column) => (
-        <div className={classes.column} key={column.id}>
-          {column.title}
-        </div>
+        <HeaderColumn column={column} />
       ))}
     </div>
   );

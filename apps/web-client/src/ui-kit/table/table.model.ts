@@ -6,6 +6,7 @@ export interface Column {
   id: string;
   title: string;
   dataIndex: string;
+  width?: number;
 }
 
 export interface TableProps {
