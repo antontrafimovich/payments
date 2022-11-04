@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { post, postFile } from "../../fetch";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import { get, postFile } from '../../fetch';
 
 const getReport = createAsyncThunk(
   "report/getReport",
@@ -8,6 +9,15 @@ const getReport = createAsyncThunk(
     formData.append("file", file);
 
     const response = await postFile("report", formData);
+    const result = await response.json();
+    return result;
+  }
+);
+
+const getInitialReport = createAsyncThunk(
+  "report/getInitialReport",
+  async () => {
+    const response = await get("initial_report");
     const result = await response.json();
     return result;
   }
@@ -27,7 +37,18 @@ export const reportSlice = createSlice({
       state.data.status = "pending";
     });
 
+    builder.addCase(getInitialReport.pending, (state, action) => {
+      state.data.status = "pending";
+    });
+
     builder.addCase(getReport.fulfilled, (state, action) => {
+      state.data = {
+        status: "done",
+        entities: action.payload,
+      };
+    });
+
+    builder.addCase(getInitialReport.fulfilled, (state, action) => {
       state.data = {
         status: "done",
         entities: action.payload,
@@ -36,6 +57,6 @@ export const reportSlice = createSlice({
   },
 });
 
-export { getReport };
+export { getReport, getInitialReport };
 
 export default reportSlice.reducer;

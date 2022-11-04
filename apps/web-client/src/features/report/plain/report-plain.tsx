@@ -11,12 +11,24 @@ export interface ReportPlainProps {
 
 export const ReportPlain = ({ data }: ReportPlainProps) => {
   const columns: Column[] = useMemo(() => {
+    const getWidthByKey = (key: string) => {
+      if (key === "counterparty") {
+        return 250;
+      }
+
+      if (key === "description") {
+        return 850;
+      }
+
+      return 200;
+    };
+
     return Object.keys(data).map((columnKey) => {
       return {
         id: columnKey,
         title: capitalize(columnKey),
         dataIndex: columnKey,
-        width: columnKey === 'counterparty' ? 250 : 200
+        width: getWidthByKey(columnKey),
       };
     });
   }, [data]);
