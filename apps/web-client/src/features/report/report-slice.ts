@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { get, postFile } from '../../fetch';
+import { get, postFile } from "../../fetch";
 
 const getReport = createAsyncThunk(
   "report/getReport",
@@ -18,6 +18,11 @@ const getInitialReport = createAsyncThunk(
   "report/getInitialReport",
   async () => {
     const response = await get("initial_report");
+
+    if (response.status === 204) {
+      return undefined;
+    }
+
     const result = await response.json();
     return result;
   }

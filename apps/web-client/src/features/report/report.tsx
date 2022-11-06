@@ -10,10 +10,27 @@ export const Report = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getInitialReport())
-  }, [dispatch])
+    dispatch(getInitialReport());
+  }, [dispatch]);
 
-  if (data.status === "done") {
+  if (data.status === "pending") {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "24px",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
+  if (data.status === "done" && data.entities) {
     return <ReportPlain data={data.entities} />;
   }
 
