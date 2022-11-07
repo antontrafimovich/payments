@@ -1,7 +1,8 @@
-import { useCallback, useMemo } from "react";
+import { useEffect } from "react";
 
-import { Column, Table } from "../../../ui-kit";
-import { capitalize } from "../../../utils";
+import { useDispatch, useSelector } from "../../../common";
+import { ReportTable } from "../common/table/report-table";
+import { getPlainReport } from "./report-plain-slice";
 
 export type ReportData = Record<string, Record<string, string>>;
 
@@ -9,57 +10,19 @@ export interface ReportPlainProps {
   data: ReportData;
 }
 
-export const ReportPlain = ({ data }: ReportPlainProps) => {
-  const columns: Column[] = useMemo(() => {
-    const getWidthByKey = (key: string) => {
-      if (key === "counterparty") {
-        return 250;
-      }
+export const ReportPlain = () => {
+  const report = useSelector((state) => state.report.main.activeReport);
+  const dispatch = useDispatch();
 
-      if (key === "description") {
-        return 850;
-      }
+  const data = useSelector((state) => state.report.plain.data);
 
-      return 200;
-    };
+  useEffect(() => {
+    dispatch(getPlainReport(report));
+  }, [report, dispatch]);
 
-    return Object.keys(data).map((columnKey) => {
-      return {
-        id: columnKey,
-        title: capitalize(columnKey),
-        dataIndex: columnKey,
-        width: getWidthByKey(columnKey),
-      };
-    });
-  }, [data]);
+  if (data.status === "pending") {
+    return <>Loading...</>;
+  }
 
-  const getRowsCount = useCallback(
-    (data: ReportData) => {
-      return Object.values(data[columns[0].dataIndex]).length;
-    },
-    [columns]
-  );
-
-  const rows = useMemo(() => {
-    const rowsCount = getRowsCount(data);
-
-    const rows = [];
-    for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-      const row = columns.reduce(
-        (result, column) => {
-          return {
-            ...result,
-            [column.dataIndex]: data[column.dataIndex][rowIndex],
-          };
-        },
-        { id: `${rowIndex}` }
-      );
-
-      rows.push(row);
-    }
-
-    return rows;
-  }, [data, getRowsCount, columns]);
-
-  return <Table columns={columns} rows={rows} />;
+  return <ReportTable data={data.entities} />;
 };

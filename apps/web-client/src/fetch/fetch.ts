@@ -35,10 +35,23 @@ export const postFile = (endpoint: string, body: FormData) => {
   return post(endpoint, body, { headers: null });
 };
 
-export const get = (endpoint: string, params?: RequestInit) => {
+export const get = (
+  endpoint: string,
+  query?: Record<string, string>,
+  params?: RequestInit
+) => {
   const headers = getHeaders(params);
 
-  return fetch(`http://localhost:5000/${endpoint}`, {
+  let queryString = "";
+
+  if (query) {
+    queryString = Object.keys(query).reduce((result, key, index) => {
+      const sign = index === 0 ? "?" : "&";
+      return result + `${sign}${key}=${query[key]}`;
+    }, "");
+  }
+
+  return fetch(`http://localhost:5000/${endpoint}${queryString}`, {
     method: "GET",
     headers,
   });
