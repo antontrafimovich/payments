@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { MainMenu } from "./features/main-menu/main-menu";
 import { BankSelector } from "./features/bank-selector/bank-selector";
 import { store } from "./store";
-import { Report } from "./features/report/report";
+import { Reports } from "./features/reports/reports";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <BankSelector />
         </div>
         <div className="payments-report-content">
-          <Report />
+          <Reports />
         </div>
       </div>
     </Provider>

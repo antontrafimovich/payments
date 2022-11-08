@@ -1,15 +1,14 @@
 import { useCallback, useMemo } from "react";
 
-import { Column, Table } from "../../../../ui-kit";
-import { capitalize } from "../../../../utils";
-
-export type ReportData = Record<string, Record<string, string>>;
+import { Column, Table } from "../../../../../ui-kit";
+import { capitalize } from "../../../../../utils";
+import { ReportData } from "../report-plain.model";
 
 export interface ReportPlainProps {
   data: ReportData;
 }
 
-export const ReportTable = ({ data }: ReportPlainProps) => {
+export const ReportPlainTable = ({ data }: ReportPlainProps) => {
   const columns: Column[] = useMemo(() => {
     const getWidthByKey = (key: string) => {
       if (key === "counterparty") {
