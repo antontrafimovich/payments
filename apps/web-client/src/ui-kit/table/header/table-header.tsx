@@ -15,6 +15,8 @@ export interface HeaderStylesProps extends ColumnStylesProps {}
 const useStyles = createUseStyles({
   header: {
     display: "flex",
+    flex: "0 0 40px",
+
     "& > div + div": {
       marginLeft: 1,
     },

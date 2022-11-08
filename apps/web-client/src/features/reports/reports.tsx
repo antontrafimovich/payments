@@ -9,6 +9,7 @@ const useStyles = createUseStyles({
   reportsContainer: {
     display: "flex",
     flexDirection: "column",
+    height: "100%",
   },
 });
 
