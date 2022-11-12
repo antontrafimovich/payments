@@ -1,4 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  RemoteDataSuccessValue,
+  RemoteDataValue,
+} from "../../../common/components/remote-data";
 
 import { get } from "../../../fetch";
 import { ReportConfigApi } from "../reports.api-model";
@@ -6,10 +10,7 @@ import { ReportConfig } from "../reports.model";
 import { mapReportConfigApiToDm } from "./report-selector.data-mapper";
 
 export interface ReportSelectorState {
-  data: {
-    status: "pending" | "done";
-    entities: ReportConfig[];
-  };
+  data: RemoteDataValue<ReportConfig[]>;
 }
 
 export type ReportSelectorStateReducers = {};
@@ -36,7 +37,6 @@ export const reportSelectorSlice = createSlice<
   initialState: {
     data: {
       status: "pending",
-      entities: null,
     },
   },
   reducers: {},
@@ -52,7 +52,8 @@ export const reportSelectorSlice = createSlice<
         { payload }: { type: string; payload: ReportConfigApi[] }
       ) => {
         state.data.status = "done";
-        state.data.entities = payload.map(mapReportConfigApiToDm);
+        (state.data as RemoteDataSuccessValue<ReportConfig[]>).value =
+          payload.map(mapReportConfigApiToDm);
       }
     );
   },

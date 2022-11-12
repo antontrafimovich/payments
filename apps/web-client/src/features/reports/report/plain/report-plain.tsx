@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "../../../../common";
+import { RemoteData, useDispatch, useSelector } from "../../../../common";
 
 import { getReportData } from "./report-plain-slice";
 import { ReportPlainTable } from "./table/report-plain-table";
@@ -13,16 +13,15 @@ export interface ReportPlainProps {
 export const ReportPlain = () => {
   const report = useSelector((state) => state.reports.main.activeReportConfig);
   const dispatch = useDispatch();
-
   const data = useSelector((state) => state.reports.report.plain.data);
 
   useEffect(() => {
     dispatch(getReportData(report));
   }, [report, dispatch]);
 
-  if (data.status === "pending") {
-    return <>Loading...</>;
-  }
+  return <RemoteData value={data} success={ReportValueSuccess} />;
+};
 
-  return <ReportPlainTable data={data.entities} />;
+export const ReportValueSuccess = ({ value: data }: { value: ReportData }) => {
+  return <ReportPlainTable data={data} />;
 };

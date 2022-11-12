@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RemoteDataSuccessValue, RemoteDataValue } from "../../../../common";
 
 import { get } from "../../../../fetch";
 import { ReportConfig } from "../../reports.model";
@@ -6,10 +7,7 @@ import { mapDmToReportConfig } from "./report-plain.data-mapper";
 import { ReportData } from "./report-plain.model";
 
 export interface ReportPlainState {
-  data: {
-    status: "pending" | "done";
-    entities: ReportData;
-  };
+  data: RemoteDataValue<ReportData>;
 }
 
 const getReportData = createAsyncThunk(
@@ -38,7 +36,6 @@ export const reportPlainSlice = createSlice<
   initialState: {
     data: {
       status: "pending",
-      entities: null,
     },
   },
   reducers: {},
@@ -51,7 +48,7 @@ export const reportPlainSlice = createSlice<
       getReportData.fulfilled,
       (state, { payload }: { type: string; payload: ReportData }) => {
         state.data.status = "done";
-        state.data.entities = payload;
+        (state.data as RemoteDataSuccessValue<ReportData>).value = payload;
       }
     );
   },

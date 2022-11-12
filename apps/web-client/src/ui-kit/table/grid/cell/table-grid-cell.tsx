@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { GridChildComponentProps } from "react-window";
 import { Column, Row } from "../../table.model";
@@ -37,9 +37,17 @@ export const TableGridCell = memo(
 
     const classes = useStyles({ columnIndex });
 
+    const resultRowValue = useMemo(() => {
+      if (column.render) {
+        return column.render(rowValue);
+      }
+
+      return rowValue;
+    }, [rowValue, column]);
+
     return (
       <div style={style} className={classes.gridCell}>
-        {rowValue as string}
+        {resultRowValue as string}
       </div>
     );
   }

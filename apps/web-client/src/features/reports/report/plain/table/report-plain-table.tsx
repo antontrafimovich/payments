@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 
 import { Column, Table } from "../../../../../ui-kit";
-import { capitalize } from "../../../../../utils";
+import { capitalize, format } from "../../../../../utils";
 import { ReportData } from "../report-plain.model";
 
 export interface ReportPlainProps {
@@ -23,12 +23,25 @@ export const ReportPlainTable = ({ data }: ReportPlainProps) => {
     };
 
     return Object.keys(data).map((columnKey) => {
-      return {
+      const result = {
         id: columnKey,
         title: capitalize(columnKey),
         dataIndex: columnKey,
         width: getWidthByKey(columnKey),
       };
+
+      if (columnKey === "date") {
+        return {
+          ...result,
+          render: (v: number) => {
+            const date = new Date(v);
+
+            return format(date);
+          },
+        };
+      }
+
+      return result;
     });
   }, [data]);
 
